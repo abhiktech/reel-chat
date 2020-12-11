@@ -32,8 +32,19 @@ removeUser = (id) => {
     }
 };
 
+getUsersByRoom = (room) => {
+    let usersInRoom = [];
+    for(let i = 0; i < users.length; ++i) {
+        if(users[i].room === room) {
+            usersInRoom.push(users[i].username);
+        }
+    }
+    return usersInRoom;
+};
+
 module.exports = {
     userJoin,
     getCurrentUser, 
-    removeUser
+    removeUser,
+    getUsersByRoom
 };

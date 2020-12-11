@@ -8,7 +8,7 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 const formatMessage = require('./utils/messages');
-const {userJoin, getCurrentUser, removeUser} = require('./utils/users');
+const {userJoin, getCurrentUser, removeUser, getUsersByRoom} = require('./utils/users');
 
 const app = express();
 const server = http.createServer(app);
@@ -33,15 +33,23 @@ io.on('connection', (socket) => {
 
         // Sending a message to the client that just connected
 
-        socket.emit('message', formatMessage(botName, `Welcome to ReelChat ${username}!`));
+        socket.emit('message', formatMessage(botName, `Welcome to room ${room} ${username}!`));
 
         // Broadcast to the corresponding room when a user connects
         // Sends the message to all connected users except for the one that just conected
-
+        
         socket.broadcast
         .to(user.room)
         .emit('message', formatMessage(botName,`${username} has joined the chat.`));
-    
+
+        // Updating the view of users in room
+
+        const usersInRoom = getUsersByRoom(user.room);
+        
+        io
+        .to(user.room)
+        .emit('displayUsers', usersInRoom);
+        
     });
 
     // Note : io.emit() broadcasts to ALL connected clients
@@ -69,6 +77,14 @@ io.on('connection', (socket) => {
         io
         .to(user.room)
         .emit('message', formatMessage(botName,`${user.username} has left the chat.`));
+
+        // Updating the view of users in room
+
+        const usersInRoom = getUsersByRoom(user.room);
+
+        io
+        .to(user.room)
+        .emit('displayUsers', usersInRoom);
     });
 
 });
