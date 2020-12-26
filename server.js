@@ -1,8 +1,3 @@
-/*
-https://www.youtube.com/watch?v=jD7FnbI76Hg&ab_channel=TraversyMedia
-Done till 38:47 out of 58:44
-*/
-
 const path = require('path');
 const http = require('http');
 const express = require('express');
