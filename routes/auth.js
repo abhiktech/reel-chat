@@ -31,10 +31,9 @@ router.post('/login', async (req, res) => {
 
     } else {
 
-        // Send a message to the user that user credentials do not match.
-        // Also let the form informtion persist after submission.
-        
-        res.render('login');
+        // Todo : Let the form informtion persist after submission.
+
+        res.render('login', {invalidCredentials: true});
 
     }
 
@@ -56,10 +55,9 @@ router.post('/signup', async (req, res) => {
 
     if(user) {
 
-        // Send a message to the user that user already exists with this username.
-        // Also let the form informtion persist after submission.
+        // Todo : Let the form informtion persist after submission.
 
-        res.render('signup');
+        res.render('signup', {usernameExists: true});
 
     } else {
 

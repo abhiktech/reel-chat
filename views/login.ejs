@@ -27,7 +27,7 @@
 							name="username"
 							id="username"
 							placeholder="Enter username..."
-							required
+                            required minlength="5" maxlength="30"
 						/>
 					</div>
 					<div class="form-control">
@@ -37,10 +37,15 @@
 							name="password"
 							id="password"
 							placeholder="Enter password..."
-							required
+                            required minlength="5" maxlength="30"
 						/>
-					</div>
-					<button type="submit" class="btn">Login</button>
+                    </div>
+                    <% if(typeof(invalidCredentials) !== 'undefined') { %>
+                        <p style="color:black">*User credentials do not match</p>
+                    <% } %>
+                    <button type="submit" class="btn">Login</button>
+                    <br />
+                    <div><a href="/auth/signup">Don't have an account? Signup now!</a></div>
 				</form>
 			</main>
 		</div>

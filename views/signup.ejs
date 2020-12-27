@@ -27,7 +27,7 @@
 							name="username"
 							id="username"
 							placeholder="Enter username..."
-							required
+							required minlength="5" maxlength="30"
 						/>
 					</div>
 					<div class="form-control">
@@ -37,10 +37,14 @@
 							name="password"
 							id="password"
 							placeholder="Enter password..."
-							required
+							required minlength="5" maxlength="30"
 						/>
-					</div>
-					<button type="submit" class="btn">Signup</button>
+                    </div>
+                    <% if(typeof(usernameExists) !== 'undefined') { %>
+                        <p style="color:black">*Username already exists</p>
+                    <% } %>
+                    <button type="submit" class="btn">Signup</button>
+                    <div><a href="/auth/login">Have an account? Login then!</a></div>
 				</form>
 			</main>
 		</div>
