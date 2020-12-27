@@ -2,19 +2,53 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
+const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 const formatMessage = require('./utils/messages');
 const {userJoin, getCurrentUser, removeUser, getUsersByRoom} = require('./utils/users');
+const connectDB = require('./config/db');
+
 
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+// Load config file
+
+dotenv.config({path: './config/config.env'});
+
+// Set template engine directory
+
+app.set('views', './views');
+app.set('view engine', 'ejs');
+
 // Set 'public' folder as static folder
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Setting a session
+// Allows storage of session info in MongoDB
+const store = new MongoDBStore({
+    uri: process.env.MONGO_URI,
+    collection: 'sessions'
+});
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    store: store
+}));
+
 const botName = 'ReelChat Bot';
 
+
+// See if you can move the Socket.io implementation to another file!!!
 // Run when a client connects
 
 io.on('connection', (socket) => {
@@ -83,6 +117,14 @@ io.on('connection', (socket) => {
     });
 
 });
+
+// Establishing a database connection
+
+connectDB();
+
+// Setting routes
+
+app.use('/auth', require('./routes/auth'));
 
 const PORT = process.env.PORT || 3000;
 
