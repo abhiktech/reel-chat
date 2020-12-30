@@ -124,7 +124,10 @@ connectDB();
 
 // Setting routes
 
+// Authntication route
 app.use('/auth', require('./routes/auth'));
+// Homepage route
+app.use('/home', require('./routes/home'));
 
 const PORT = process.env.PORT || 3000;
 

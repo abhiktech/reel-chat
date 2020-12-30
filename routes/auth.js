@@ -2,19 +2,20 @@ const express = require('express');
 const sha1 = require('sha1');
 const router = express.Router();
 
+const Auth = require('../middleware/auth');
 const User = require('../models/User');
 
 // @desc presents the login form
 // @route GET /auth/login
 
-router.get('/login', (req, res) => {
+router.get('/login', Auth.ensureGuest, (req, res) => {
     res.render('login');
 });
 
 // @desc either logs in the user or redirects back to login page
 // @route POST /auth/login
 
-router.post('/login', async (req, res) => {
+router.post('/login', Auth.ensureGuest, async (req, res) => {
     
     const password_hash = sha1(req.body.password);
 
@@ -26,8 +27,8 @@ router.post('/login', async (req, res) => {
 
         req.session.username = req.body.username;
         req.session.loggedIn = true;        
-
-        res.send('Logged In!');
+        
+        res.redirect('/home');
 
     } else {
 
@@ -42,14 +43,14 @@ router.post('/login', async (req, res) => {
 // @desc presents sign up form
 // @route GET /auth/signup
 
-router.get('/signup', (req, res) => {
+router.get('/signup', Auth.ensureGuest, (req, res) => {
     res.render('signup');
 });
 
 // @desc either signs in user or redirects back to signup page
 // @route POST /auth/signup
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', Auth.ensureGuest, async (req, res) => {
 
     const user = await User.findOne({username:req.body.username});
 
@@ -71,7 +72,7 @@ router.post('/signup', async (req, res) => {
         req.session.username = req.body.username;
         req.session.loggedIn = true;
 
-        res.send('User created and Logged In!');
+        res.redirect('/home');
 
     }
 
@@ -80,9 +81,9 @@ router.post('/signup', async (req, res) => {
 // @desc logs the user out
 // @rpute GET /auth/logout
 
-router.get('/logout', (req, res) => {
+router.get('/logout', Auth.ensureAuth, (req, res) => {
     req.session.loggedIn = false;
-    res.send('Logged out!');
+    res.redirect('/auth/login');
 });
 
 module.exports = router;
