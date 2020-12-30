@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const Auth = require('./middleware/auth')
 const formatMessage = require('./utils/messages');
 const {userJoin, getCurrentUser, removeUser, getUsersByRoom} = require('./utils/users');
 const connectDB = require('./config/db');
@@ -125,7 +126,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Setting routes
 
 // Index route
-app.get('/', require('./middleware/auth').ensureGuest, (req, res) => {
+app.get('/', Auth.ensureGuest, (req, res) => {
     res.render('index');
 });
 
@@ -134,6 +135,9 @@ app.use('/auth', require('./routes/auth'));
 
 // Homepage route
 app.use('/home', require('./routes/home'));
+
+// If none of the routes are hit
+app.use('/', Auth.ensureGuest, Auth.ensureAuth);
 
 const PORT = process.env.PORT || 3000;
 
