@@ -27,10 +27,6 @@ dotenv.config({path: './config/config.env'});
 app.set('views', './views');
 app.set('view engine', 'ejs');
 
-// Set 'public' folder as static folder
-
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Setting a session
 // Allows storage of session info in MongoDB
 const store = new MongoDBStore({
@@ -122,10 +118,20 @@ io.on('connection', (socket) => {
 
 connectDB();
 
+// Set 'public' folder as static folder
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Setting routes
+
+// Index route
+app.get('/', require('./middleware/auth').ensureGuest, (req, res) => {
+    res.render('index');
+});
 
 // Authntication route
 app.use('/auth', require('./routes/auth'));
+
 // Homepage route
 app.use('/home', require('./routes/home'));
 
