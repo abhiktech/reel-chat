@@ -42,20 +42,22 @@ app.use(session({
     store: store
 }));
 
-const botName = 'ReelChat Bot';
 
+const botName = 'ReelChat Bot';
 
 // See if you can move the Socket.io implementation to another file!!!
 // Run when a client connects
 
 io.on('connection', (socket) => {
-    socket.on('joinRoom', ({username, room}) => {
+    socket.on('joinRoom', async ({username, room}) => {
         
-        const user = userJoin(socket.id, username, room);
+        // Adding socketid and room to the user collection.
+        
+        await userJoin(socket.id, username, room);
         
         // Setting the room
 
-        socket.join(user.room);
+        socket.join(room);
 
         // Sending a message to the client that just connected
 
@@ -65,17 +67,18 @@ io.on('connection', (socket) => {
         // Sends the message to all connected users except for the one that just conected
         
         socket.broadcast
-        .to(user.room)
+        .to(room)
         .emit('message', formatMessage(botName,`${username} has joined the chat.`));
 
-        // Updating the view of users in room
+        // Adding a new user to the view of users in room
 
-        const usersInRoom = getUsersByRoom(user.room);
-        
-        // TODO : Change this so that instead of re-rendering, you just append
-        io
-        .to(user.room)
-        .emit('displayUsers', usersInRoom);
+        socket.broadcast
+        .to(room)
+        .emit('addUser', username);
+
+        const usersInRoom = await getUsersByRoom(room);
+
+        socket.emit('displayUsers', usersInRoom);
         
     });
 
@@ -83,33 +86,31 @@ io.on('connection', (socket) => {
 
     // Listen for chatMessage from a conncted user
 
-    socket.on('chatMessage', (msg) => {
-        // Obtaining the user instance
-
-        const user = getCurrentUser(socket.id);
+    socket.on('chatMessage', (msg, username, room) => {
 
         // Sending the message to all users in the room
 
         io
-        .to(user.room)
-        .emit('message', formatMessage(user.username, msg));
+        .to(room)
+        .emit('message', formatMessage(username, msg));
+
     });
 
     // Runs when client disconnects
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
         
-        const user = removeUser(socket.id);
+        const user = await getUser(socket.id)
 
+        await removeUser(socket.id);
+        
         io
         .to(user.room)
         .emit('message', formatMessage(botName,`${user.username} has left the chat.`));
 
         // Updating the view of users in room
 
-        const usersInRoom = getUsersByRoom(user.room);
-
-        // TODO : Change this so that instead of re-rendering, you just append
+        const usersInRoom = await getUsersByRoom(user.room);
 
         io
         .to(user.room)

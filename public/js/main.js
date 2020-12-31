@@ -38,6 +38,12 @@ socket.on('displayUsers', (users) => {
     }
 });
 
+// Add a new user
+
+socket.on('addUser', (new_user) => {
+    document.getElementById('users').innerHTML += "<li>" + new_user + "</li>";
+});
+
 // Message submit event listener
 
 chatForm.addEventListener('submit', (e) => {
@@ -49,7 +55,7 @@ chatForm.addEventListener('submit', (e) => {
 
     // Sending the message to the server
 
-    socket.emit('chatMessage', msg);
+    socket.emit('chatMessage', msg, username, room);
 
     // Clearing input after sending a message
 

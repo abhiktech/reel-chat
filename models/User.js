@@ -8,6 +8,12 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    room: {
+        type: String
+    },
+    socketid: {
+       type: String 
     }
 });
 

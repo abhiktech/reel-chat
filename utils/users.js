@@ -1,50 +1,70 @@
-const users = [];
+const User = require('../models/User');
 
 // Join user to chat
 
 userJoin = (id, username, room) => {
-    const user = {id, username, room};
+    
+    return new Promise(async (resolve, reject) => {
 
-    users.push(user);
+        const user = await User.findOne({username: username});
 
-    return user;
-};
+        user.room = room;
 
-// Get current user
+        user.socketid = id;
 
-getCurrentUser = (id) => {
-    for(let i = 0; i < users.length; ++i) {
-        if(users[i].id === id) {
-            return users[i];
-        }
-    }
+        await user.save();
+
+        resolve();
+    });
 };
 
 // Removes the current user upon disconnection
 
 removeUser = (id) => {
-    for(let i = 0; i < users.length; ++i) {
-        if(users[i].id === id) {
-            const user = users[i];
-            users.splice(i, 1);
-            return user;
-        }
-    }
+
+    return new Promise(async (resolve, reject) => {
+
+        const user = await User.findOne({socketid: id});
+
+        user.room = null;
+
+        user.socketid = null;
+
+        await user.save();
+
+        resolve();
+    });
+};
+
+getUser = (id) => {
+
+    return new Promise(async(resolve, reject) => {
+
+        const user = await User.findOne({socketid: id});
+
+        resolve(user);
+    }); 
+
 };
 
 getUsersByRoom = (room) => {
-    let usersInRoom = [];
-    for(let i = 0; i < users.length; ++i) {
-        if(users[i].room === room) {
-            usersInRoom.push(users[i].username);
+
+    return new Promise(async (resolve, reject) => {
+        
+        let usersInRoom = await User.find({room: room});
+
+        let usernames = [];
+
+        for(let i = 0; i < usersInRoom.length; ++i) {
+            usernames.push(usersInRoom[i].username);
         }
-    }
-    return usersInRoom;
+
+        resolve(usernames);
+    });
 };
 
 module.exports = {
     userJoin,
-    getCurrentUser, 
     removeUser,
     getUsersByRoom
 };
