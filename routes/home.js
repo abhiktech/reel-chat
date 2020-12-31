@@ -8,7 +8,9 @@ const Auth = require('../middleware/auth');
 
 router.get('/', Auth.ensureAuth, (req, res) => {
     
-    res.send(`Welcome ${req.session.username}!`);
+    res.render('home', {username: req.session.username});
 });
+
+
 
 module.exports = router;

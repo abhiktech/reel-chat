@@ -72,6 +72,7 @@ io.on('connection', (socket) => {
 
         const usersInRoom = getUsersByRoom(user.room);
         
+        // TODO : Change this so that instead of re-rendering, you just append
         io
         .to(user.room)
         .emit('displayUsers', usersInRoom);
@@ -108,6 +109,8 @@ io.on('connection', (socket) => {
 
         const usersInRoom = getUsersByRoom(user.room);
 
+        // TODO : Change this so that instead of re-rendering, you just append
+
         io
         .to(user.room)
         .emit('displayUsers', usersInRoom);
@@ -135,6 +138,9 @@ app.use('/auth', require('./routes/auth'));
 
 // Homepage route
 app.use('/home', require('./routes/home'));
+
+// Chat page route
+app.use('/chat', Auth.ensureAuth, require('./routes/chat'));
 
 // If none of the routes are hit
 app.use('/', Auth.ensureGuest, Auth.ensureAuth);
