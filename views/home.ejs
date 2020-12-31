@@ -19,15 +19,13 @@
 			<main class="join-main">
 				<form method="GET" action="/chat">
 					<div class="form-control">
-						<label for="room">Room</label>
-						<select name="room">
-							<option value="JavaScript">JavaScript</option>
-							<option value="Python">Python</option>
-							<option value="PHP">PHP</option>
-							<option value="C#">C#</option>
-							<option value="Ruby">Ruby</option>
-							<option value="Java">Java</option>
-						</select>
+						<label for="room">Enter a room</label>
+						<input
+							type="text"
+							name="room"
+							placeholder="Enter room..."
+							required
+						/>
 					</div>
 					<button type="submit" class="btn">Join Chat</button>
 				</form>
