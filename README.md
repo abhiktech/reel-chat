@@ -1,5 +1,5 @@
 # ReelChat
-A real-time, synchronous messaging application.
+A real-time, synchronous messaging application.<br />
 **Link** - https://reel-chat.herokuapp.com/
 
 ## Motivation
