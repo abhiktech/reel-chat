@@ -69,10 +69,28 @@ chatForm.addEventListener('submit', (e) => {
 
 outputMessage = (message) => {
     // Implementing DOM Manipulation
+    const d = new Date();
+    let hours = d.getHours();
+    
+    let am_or_pm;
+
+    if(hours < 12) {
+        am_or_pm = "am";
+    } else {
+        am_or_pm = "pm";
+    }
+
+    if(hours == 0 || hours == 12) {
+        hours = 12;
+    } else {
+        hours = hours % 12;
+    }
+
+    const time = hours  + ":" + d.getMinutes() + " " + am_or_pm;
 
     const div = document.createElement('div');
     div.classList.add('message');
-    div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p>
+    div.innerHTML = `<p class="meta">${message.username} <span>${time}</span></p>
     <p class="text">
         ${message.text}
     </p>`;

@@ -8,7 +8,7 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const Auth = require('./middleware/auth')
 const formatMessage = require('./utils/messages');
-const {userJoin, getCurrentUser, removeUser, getUsersByRoom} = require('./utils/users');
+const {userJoin, removeAndGetUser, getUsersByRoom} = require('./utils/users');
 const connectDB = require('./config/db');
 
 
@@ -78,6 +78,8 @@ io.on('connection', (socket) => {
 
         const usersInRoom = await getUsersByRoom(room);
 
+        // For the new users, displaying all the active users
+
         socket.emit('displayUsers', usersInRoom);
         
     });
@@ -100,21 +102,21 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', async () => {
         
-        const user = await getUser(socket.id)
+        // Removing the user from 
+        const user = await removeAndGetUser(socket.id);
 
-        await removeUser(socket.id);
-        
         io
         .to(user.room)
         .emit('message', formatMessage(botName,`${user.username} has left the chat.`));
 
-        // Updating the view of users in room
-
         const usersInRoom = await getUsersByRoom(user.room);
+
+        // Updating the view of users in room
 
         io
         .to(user.room)
         .emit('displayUsers', usersInRoom);
+
     });
 
 });

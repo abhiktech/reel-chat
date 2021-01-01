@@ -32,8 +32,6 @@ router.post('/login', Auth.ensureGuest, async (req, res) => {
 
     } else {
 
-        // Todo : Let the form informtion persist after submission.
-
         res.render('login', {invalidCredentials: true});
 
     }
@@ -55,8 +53,6 @@ router.post('/signup', Auth.ensureGuest, async (req, res) => {
     const user = await User.findOne({username:req.body.username});
 
     if(user) {
-
-        // Todo : Let the form informtion persist after submission.
 
         res.render('signup', {usernameExists: true});
 
