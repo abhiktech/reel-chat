@@ -30,9 +30,9 @@ Honestly, I primarily built this application since I thought it would be fun to 
   - Set `SESSION_SECRET` to a secure string of your choice.
 
 ## About WebSockets and Socket.io
-A WebSocket is a persistent connection between client and server which allows the bi-directional communication of data. It’s an alternative to the http protocol (which is strictly unidirectional) and long polling (which essentially persists the connection as long as needed but comes with the demerit that it ties up server resources). A WebSocket uses the existing TCP/IP connection between client and server. It uses the ws and wss protocol and essentially breaks the data down into discrete chunks called frames.
+A `WebSocket` is a persistent connection between client and server which allows the bi-directional communication of data. It’s an alternative to the http protocol (which is strictly unidirectional) and long polling (which essentially persists the connection as long as needed but comes with the demerit that it ties up server resources). A WebSocket uses the existing TCP/IP connection between client and server. It uses the ws and wss protocol and essentially breaks the data down into discrete chunks called frames.
 
-Socket.io is a JavaScript library that allows the bidirectional, event-based communication between client and server. It uses WebSockets to enable this sort of communication or falls to long polling if this protocol is unavailable (which generally should not happen for 97% of browsers or if you have a firewall, proxy or something like that). Socket.io essentially allows you to emit events and listen for these events on the other side.
+`Socket.io` is a JavaScript library that allows the bidirectional, event-based communication between client and server. It uses WebSockets to enable this sort of communication or falls to long polling if this protocol is unavailable (which generally should not happen for 97% of browsers or if you have a firewall, proxy or something like that). Socket.io essentially allows you to emit events and listen for these events on the other side.
 
 ## License
 `MIT`
