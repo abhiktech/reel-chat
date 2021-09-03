@@ -2,9 +2,6 @@
 A real-time, synchronous messaging application.<br />
 **Link** - https://reel-chat.herokuapp.com/
 
-## Motivation
-Honestly, I primarily built this application since I thought it would be fun to do and would be a cool project to add to my resume. However, I can say that I took inspiration from the fact that many people in the University of Michigan were actually spamming Facebook groups in search of Football tickets, which is why I thought that it would be cool to build an app specifically for this purpose. Obviously, the app hasn’t been scaled enough to support thousands of users, but it’s a good framework if I would potentially want to scale it up and actually market it.
-
 ## Technologies Used
 - `Node.js` - Shows good performance for more I/O intensive and less CPU intensive use cases.
 - `Express` - Well abstracted and makes tasks such as route handling, API requests, database queries, etc much simpler.
@@ -36,4 +33,3 @@ A `WebSocket` is a persistent connection between client and server which allows 
 
 ## License
 `MIT`
-
