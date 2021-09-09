@@ -150,7 +150,7 @@ app.use('/chat', Auth.ensureAuth, require('./routes/chat'));
 // If none of the routes are hit
 app.use('/', Auth.ensureGuest, Auth.ensureAuth);
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
     console.log(`Server running on ${PORT}`);

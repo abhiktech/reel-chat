@@ -1,6 +1,5 @@
 # ReelChat
 A real-time, synchronous messaging application.<br />
-**Link** - https://reel-chat.herokuapp.com/
 
 ## Technologies Used
 - `Node.js` - Shows good performance for more I/O intensive and less CPU intensive use cases.
